@@ -1,9 +1,14 @@
+import { toast } from "nextjs-toast-notify";
+import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
 import { useAppSelector } from "@/store/store";
 import { useAppDispatch } from '@/store/store';
 import { setLogout } from '@/store/reducers/index';
+import { removeAuthToken } from '@/utils/auth';
+import { API_BASE_URL } from '@/utils';
+
 const navigation = [
     { name: 'Dashboard', href: 'dashboard', current: true },
     { name: 'Team', href: 'team', current: false },
@@ -15,10 +20,32 @@ function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(' ')
 }
 
+const toastConfig = {
+    duration: 4000,
+    progress: true,
+    position: "top-right" as const,  // Add type assertion
+    transition: "bounceIn",
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>',
+    sonido: true,
+  } as const;
+
 export default function Navbar() {
     const dispatch = useAppDispatch();
     const { isAuthenticated, userData } = useAppSelector((state) => state.auth);
 
+    function handleLogout() {
+        fetch(`${API_BASE_URL}/api/auth/signout`, {
+            method: 'POST',
+        }).then(() => {
+            console.log('Logged out successfully');
+            toast.success('Logged out successfully', toastConfig);
+            dispatch(setLogout());
+            removeAuthToken()
+        }).catch((error) => {
+            toast.error('Something went wrong', toastConfig);
+            console.log(error);
+        });
+    }
     return (
         <Disclosure as="nav" className="bg-gray-800">
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -102,7 +129,7 @@ export default function Navbar() {
                                     </Link>
                                 </MenuItem>
                                 <MenuItem>
-                                    <Link href="/" onClick={() => dispatch(setLogout())}>
+                                    <Link href="/" onClick={handleLogout}>
                                         <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                                             Sign out
                                         </span>

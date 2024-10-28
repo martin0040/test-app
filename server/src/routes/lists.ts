@@ -2,11 +2,11 @@ import { Router } from 'express';
 const router = Router();
 const multer  = require('multer')
 
-import { uploadList, getList } from '../controllers/listController';
-const upload = multer({ dest: './public/uploads/' })
+import { createList, getList } from '../controllers/lists';
+const upload = multer({ dest: './uploads/' })
 // Registration route
 router.get('/', getList);
-router.post('/',upload.single('file'), uploadList);
+router.post('/',upload.single('file'), createList);
 // Login route
 
 export default router;

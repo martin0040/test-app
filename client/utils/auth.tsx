@@ -12,7 +12,7 @@ export const setAuthToken = (token: string) => {
   
   // Remove the token from localStorage
   export const removeAuthToken = () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
   };
   
   // Check if the user is authenticated

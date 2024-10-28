@@ -10,7 +10,7 @@ import Link from "next/link";
 const AuthViewer = () => {
 
     const router = useRouter();
-    const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const { isAuthenticated,userData } = useAppSelector((state) => state.auth);
     const [icon, setIcon] = useState<File | null>(null);
     const [title, setTitle] = useState<string>("");
     const [link, setLink] = useState<string>("");
@@ -19,10 +19,18 @@ const AuthViewer = () => {
     useEffect(() => {
         if (!isAuthenticated) router.push('/auth/signin');
         else {
-            fetch(`${API_BASE_URL}/list`)
-                .then(res => res.json())
-                .then(data => setLists(data))
-                .catch(err => console.log(err));
+            const fetchLists = async () => {
+                await fetch(`${API_BASE_URL}/api/lists`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => setLists(data))
+                    .catch(err => console.log(err));
+            }
+            fetchLists();
         }
     }, [isAuthenticated]);
 
@@ -40,7 +48,7 @@ const AuthViewer = () => {
         formData.append('link', link);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/list`, {
+            const response = await fetch(`${API_BASE_URL}/api/lists`, {
                 method: 'POST',
                 body: formData,
             });
@@ -61,7 +69,7 @@ const AuthViewer = () => {
 
     return (
         <div className="flex lg:flex-row flex-wrap w-full h-full">
-            <div className="flex lg:flex-col md:w-2/5 flex-col w-full md:h-[90vh] bg-[#e5e7eb] border-r border-slate-200 rounded-r-xl items-center">
+            <div className="flex lg:flex-col md:w-2/5 flex-col w-full md:h-[100vh] bg-[#e5e7eb] border-r border-slate-200 rounded-r-xl items-center">
                 <div className="text-xl font-bold p-4 justify-center items-center">Lists</div>
                 {lists.map((list, index) => (
                     <div key={index} className="flex flex-row w-full h-10 mt-5 justify-center items-center border-b border-[#d1d5db] border-solid">
@@ -80,8 +88,8 @@ const AuthViewer = () => {
                     </div>
                 ))}
             </div>
-            <div className="flex lg:flex-col md:w-3/5 flex-col w-full md:h-[90vh] bg-blue-500 justify-center items-center">
-                <div className="relative flex flex-col md:w-[auto] w-full rounded-xl bg-transparent justify-center items-center bg-[#a1d1d1] p-5 ">
+            <div className="flex lg:flex-col md:w-3/5 flex-col w-full md:h-[100vh] bg-blue-500 justify-center items-center">
+                <div className="relative flex flex-col md:w-[auto] w-full rounded-xl bg-white justify-center items-center bg-[#a1d1d1] p-5 ">
                     <h4 className="block text-xl font-medium text-slate-800">
                         ADD LIST
                     </h4>

@@ -21,7 +21,7 @@
 /server/db/
 /server/node_modules
 /server/package-lock.json
-/server/public/uploads
+/server/uploads
 
 # misc
 .DS_Store

@@ -1,36 +1,17 @@
 import { toast } from "nextjs-toast-notify";
 import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
-import Notification from '@/components/Notification';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { API_BASE_URL } from '@/utils/index';
 import { useAppSelector } from '@/store/store';
 import { useRouter } from 'next/router'
 
-interface NotificationProps {
-    visible: boolean;
-    icon: React.ReactNode;
-    title: string;
-    type: 'success' | 'error';
-    message: string;
-    onClose?: () => void;
-    autoCloseDelay: number;
-}
-
 export default function SignUp() {
     const { isAuthenticated } = useAppSelector((state) => state.auth);
     const router = useRouter();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [notification, setNotification] = useState<NotificationProps>({
-        visible: false,
-        icon: null,
-        title: '',
-        type: 'success',
-        onClose: () => { },
-        message: '',
-        autoCloseDelay: 3000
-    });
+
     useEffect(() => {
         if (isAuthenticated) {
             router.push('/');
@@ -40,13 +21,13 @@ export default function SignUp() {
         e.preventDefault();
         setIsLoading(true);
         const data = new FormData(e.target as HTMLFormElement);
-        const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: data.get('username'),
+                username: data.get('username'),
                 email: data.get('email'),
                 password: data.get('password'),
             })
@@ -61,9 +42,10 @@ export default function SignUp() {
                     icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>',
                     sonido: true,
                 })
+                router.push('/auth/signin');
                 setIsLoading(false);
             } else {
-                toast.error(result.message, {
+                toast.error(result.error, {
                     duration: 4000,
                     progress: true,
                     position: "top-right",

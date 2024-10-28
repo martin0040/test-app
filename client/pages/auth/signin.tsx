@@ -2,10 +2,9 @@ import { toast } from "nextjs-toast-notify";
 import "nextjs-toast-notify/dist/nextjs-toast-notify.css";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
-import { setAuthState, setUserData } from "@/store/reducers/index";
+import { setUserData } from "@/store/reducers/index";
 import { useAppDispatch } from "@/store/store";
 import Link from 'next/link';
-import { setAuthToken } from '@/utils/auth';
 import { API_BASE_URL } from '@/utils/index';
 import { useAppSelector } from '@/store/store';
 
@@ -35,7 +34,7 @@ export default function SignIn() {
     setIsLoading(true);
     const data = new FormData(e.target as HTMLFormElement);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/signin`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,16 +45,21 @@ export default function SignIn() {
         })
       })
       const result = await response.json();
-      if (result.token) {
+      if (result.user) {
         // Set the token in the auth utility
-        setAuthToken(result.token);
         toast.success(`You have successfully signed in.`, toastConfig)
         dispatch(setUserData(result.setUserData));
+        localStorage.setItem('userData', JSON.stringify(result.user));
         router.push('/dashboard');
+        setIsLoading(false);
+      }else {
+        toast.error(result.message || 'An error occurred during sign in', toastConfig)
+        setIsLoading(false);
       }
     } catch (error: any) {
       console.error(error);
       toast.error(error.message || 'An error occurred during sign in', toastConfig)
+      setIsLoading(false);
     }
   }
 
