@@ -1,20 +1,5 @@
 import { NextFunction, RequestHandler, Response } from 'express';
 import ListModel from '../models/lists';
-import createHttpError from 'http-errors';
-import mongoose from 'mongoose';
-import { assertIsDefined } from '../util/assertIsDefined';
-
-export const getLists: RequestHandler = async (req, res, next) => {
-  const sessionUserId = req.session.userId;
-
-  try {
-    assertIsDefined(sessionUserId);
-    const lists = await ListModel.find({ userId: sessionUserId }).exec();
-    res.status(200).json(lists);
-  } catch (error) {
-    next(error);
-  }
-};
 
 export const getList: RequestHandler = async (req, res, next) => {
 

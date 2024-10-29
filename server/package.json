@@ -1,40 +1,35 @@
 {
-  "name": "backend",
+  "name": "betting",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/server.js",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
-    "start": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node index.ts",
+    "dev": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/express-session": "^1.18.0",
-    "@types/http-errors": "^2.0.4",
-    "@types/morgan": "^1.9.9",
-    "@types/multer": "^1.4.12",
-    "eslint": "^9.1.0",
-    "nodemon": "^3.1.0",
+    "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^22.7.5",
+    "mongoose": "^8.7.1",
+    "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "connect-mongo": "^5.1.0",
-    "cors": "^2.8.5",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express-session": "^1.18.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/multer": "^1.4.12",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
-    "envalid": "^8.0.0",
-    "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "http-errors": "^2.0.0",
-    "mongoose": "^8.3.2",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.8.0"
   }
 }

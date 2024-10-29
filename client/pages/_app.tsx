@@ -22,15 +22,12 @@ export default function App({ Component, pageProps }: AppProps) {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
         if (!isEmpty(userData)) {
 
-          const res = await fetch(`${API_BASE_URL}/api/auth/refresh/${userData?.email}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
+          const res = await fetch(`${API_BASE_URL}/api/auth/refresh`, {
+            method: 'GET'
           });
 
           const result = await res.json();
-          if (result) {
+          if (result.status === 200) {
             toast.success(`You have successfully signed in.`, {
               duration: 4000,
               progress: true,

@@ -53,12 +53,12 @@ export default function SignIn() {
         router.push('/dashboard');
         setIsLoading(false);
       }else {
-        toast.error(result.message || 'An error occurred during sign in', toastConfig)
+        toast.error(result.error || 'An error occurred during sign in', toastConfig)
         setIsLoading(false);
       }
     } catch (error: any) {
       console.error(error);
-      toast.error(error.message || 'An error occurred during sign in', toastConfig)
+      toast.error(error.name || 'An error occurred during sign in', toastConfig)
       setIsLoading(false);
     }
   }

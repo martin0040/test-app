@@ -37,7 +37,6 @@ export default function Navbar() {
         fetch(`${API_BASE_URL}/api/auth/signout`, {
             method: 'POST',
         }).then(() => {
-            console.log('Logged out successfully');
             toast.success('Logged out successfully', toastConfig);
             dispatch(setLogout());
             removeAuthToken()
